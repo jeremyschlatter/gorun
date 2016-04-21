@@ -9,16 +9,16 @@
 //
 package main
 
-// This program is free software: you can redistribute it and/or modify it 
-// under the terms of the GNU General Public License version 3, as published 
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License version 3, as published
 // by the Free Software Foundation.
-// 
-// This program is distributed in the hope that it will be useful, but 
-// WITHOUT ANY WARRANTY; without even the implied warranties of 
-// MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR 
+//
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranties of
+// MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
 // PURPOSE.  See the GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License along 
+//
+// You should have received a copy of the GNU General Public License along
 // with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import (
@@ -132,15 +132,14 @@ func Compile(sourcefile, runfile string) (err error) {
 			return errors.New("can't find go tool")
 		}
 	}
-	n := TheChar()
-	gcout := runfile + "." + pid + "." + n
+	gcout := runfile + "." + pid + ".o"
 	ldout := runfile + "." + pid
-	err = Exec([]string{gotool, "tool", n+"g", "-o", gcout, sourcefile})
+	err = Exec([]string{gotool, "tool", "compile", "-o", gcout, sourcefile})
 	if err != nil {
 		return err
 	}
 	defer os.Remove(gcout)
-	err = Exec([]string{gotool, "tool", n+"l", "-o", ldout, gcout})
+	err = Exec([]string{gotool, "tool", "link", "-o", ldout, gcout})
 	if err != nil {
 		return err
 	}
@@ -269,17 +268,4 @@ func CleanDir(rundir string, now time.Time) error {
 		}
 	}
 	return nil
-}
-
-// TheChar returns the magic architecture char.
-func TheChar() string {
-	switch runtime.GOARCH {
-	case "386":
-		return "8"
-	case "amd64":
-		return "6"
-	case "arm":
-		return "5"
-	}
-	panic("unknown GOARCH: " + runtime.GOARCH)
 }
