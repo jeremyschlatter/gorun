@@ -134,28 +134,17 @@ func Compile(sourcefile, runfile string) (err error) {
 			}
 		}
 	}
-	gcout := runfile + "." + pid + ".o"
-	ldout := runfile + "." + pid
-	err = Exec([]string{gotool, "tool", "compile", "-o", gcout, sourcefile})
-	if err != nil {
-		return err
-	}
-	defer os.Remove(gcout)
-	err = Exec([]string{gotool, "tool", "link", "-o", ldout, gcout})
-	if err != nil {
-		return err
-	}
-	return os.Rename(ldout, runfile)
+	return Exec(gotool, "build", "-o", runfile, sourcefile)
 }
 
-// Exec runs args[0] with args[1:] arguments and passes through
-// stdout and stderr.
-func Exec(args []string) error {
-	cmd := exec.Command(args[0], args[1:]...)
+// Exec runs the named program with the given arguments and
+// passes through stdout and stderr.
+func Exec(name string, arg ...string) error {
+	cmd := exec.Command(name, arg...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
-	base := filepath.Base(args[0])
+	base := filepath.Base(name)
 	if err != nil {
 		return errors.New("failed to run " + base + ": " + err.Error())
 	}
