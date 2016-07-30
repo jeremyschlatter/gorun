@@ -129,7 +129,9 @@ func Compile(sourcefile, runfile string) (err error) {
 	gotool := filepath.Join(runtime.GOROOT(), "bin", "go")
 	if _, err := os.Stat(gotool); err != nil {
 		if gotool, err = exec.LookPath("go"); err != nil {
-			return errors.New("can't find go tool")
+			if gotool, err = exec.LookPath("goapp"); err != nil {
+				return errors.New("can't find go tool")
+			}
 		}
 	}
 	gcout := runfile + "." + pid + ".o"
