@@ -33,6 +33,8 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/djherbis/atime"
 )
 
 func main() {
@@ -252,9 +254,7 @@ func CleanDir(rundir string, now time.Time) error {
 	}
 	infos, err := d.Readdir(-1)
 	for _, info := range infos {
-		atim := sysStat(info).Atim
-		access := time.Unix(int64(atim.Sec), int64(atim.Nsec))
-		if access.Before(cleanLine) {
+		if atime.Get(info).Before(cleanLine) {
 			os.Remove(filepath.Join(rundir, info.Name()))
 		}
 	}

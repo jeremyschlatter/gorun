@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "LyHETdSN53yuYUCRvw2cfiCDZMc=",
+			"path": "github.com/djherbis/atime",
+			"revision": "1cbd2345b73938341574c4bcbe79894daba829cc",
+			"revisionTime": "2016-02-11T03:16:47Z"
+		}
+	],
+	"rootPath": "github.com/jeremyschlatter/gorun"
+}
